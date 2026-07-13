@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Resultados Deportivos</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <i class="bi bi-life-preserver text-info me-2 fs-4"></i>
+                <span>Gestor de Resultados</span>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#wizardModal">
+                    <i class="bi bi-magic me-1"></i>Nuevo análisis
+                </button>
+                <button class="btn btn-outline-light btn-sm" id="themeToggle" type="button" title="Cambiar tema">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 pb-5">
+
+        <!-- Área de resultados -->
+        <main id="resultsArea" class="d-none">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+                <div>
+                    <h3 class="fw-bold mb-0" id="resultsTitle">Resultados</h3>
+                    <span class="text-muted" id="resultsSubtitle"></span>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#wizardModal">
+                    <i class="bi bi-arrow-repeat me-1"></i>Analizar otro club
+                </button>
+            </div>
+
+            <!-- Barra de estadísticas -->
+            <div class="row g-3 mb-4 d-none row-cols-2 row-cols-md-4" id="statsBar"></div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent pt-3 pb-0 border-bottom-0">
+                    <ul class="nav nav-tabs card-header-tabs" id="resultTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="social-tab" data-bs-toggle="tab" data-bs-target="#social-pane" type="button" role="tab">
+                                <i class="bi bi-instagram me-1"></i>Redes
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="whatsapp-tab" data-bs-toggle="tab" data-bs-target="#whatsapp-pane" type="button" role="tab">
+                                <i class="bi bi-whatsapp me-1"></i>WhatsApp
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="press-tab" data-bs-toggle="tab" data-bs-target="#press-pane" type="button" role="tab">
+                                <i class="bi bi-newspaper me-1"></i>Prensa
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="medals-tab" data-bs-toggle="tab" data-bs-target="#medals-pane" type="button" role="tab">
+                                <i class="bi bi-award-fill me-1"></i>Medallero
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body p-3 p-md-4">
+                    <div class="tab-content" id="resultTabsContent">
+
+                        <div class="tab-pane fade show active" id="social-pane" role="tabpanel">
+                            <div class="output-toolbar">
+                                <span class="output-hint"><i class="bi bi-instagram me-1"></i>Publicación para redes sociales</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary preview-btn" data-target="socialText" data-format="social"><i class="bi bi-eye me-1"></i>Vista previa</button>
+                                    <button class="btn btn-danger copy-btn" data-target="socialText"><i class="bi bi-clipboard me-1"></i>Copiar</button>
+                                </div>
+                            </div>
+                            <textarea id="socialText" class="form-control output-text" rows="18" readonly></textarea>
+                        </div>
+
+                        <div class="tab-pane fade" id="whatsapp-pane" role="tabpanel">
+                            <div class="output-toolbar">
+                                <span class="output-hint"><i class="bi bi-whatsapp me-1"></i>Mensaje para WhatsApp</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary preview-btn" data-target="whatsappText" data-format="whatsapp"><i class="bi bi-eye me-1"></i>Vista previa</button>
+                                    <button class="btn btn-success copy-btn" data-target="whatsappText"><i class="bi bi-clipboard me-1"></i>Copiar</button>
+                                </div>
+                            </div>
+                            <textarea id="whatsappText" class="form-control output-text" rows="18" readonly></textarea>
+                        </div>
+
+                        <div class="tab-pane fade" id="press-pane" role="tabpanel">
+                            <div class="output-toolbar">
+                                <span class="output-hint"><i class="bi bi-newspaper me-1"></i>Nota de prensa</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary preview-btn" data-target="pressText" data-format="press"><i class="bi bi-eye me-1"></i>Vista previa</button>
+                                    <button class="btn btn-primary copy-btn" data-target="pressText"><i class="bi bi-clipboard me-1"></i>Copiar</button>
+                                </div>
+                            </div>
+                            <textarea id="pressText" class="form-control output-text" rows="18" readonly></textarea>
+                        </div>
+
+                        <div class="tab-pane fade" id="medals-pane" role="tabpanel">
+                            <div class="output-toolbar">
+                                <span class="output-hint"><i class="bi bi-award-fill me-1"></i>Medallero del club</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary preview-btn" data-target="medalsText" data-format="medals"><i class="bi bi-table me-1"></i>Ver tablas</button>
+                                    <button class="btn btn-warning copy-btn" data-target="medalsText"><i class="bi bi-clipboard me-1"></i>Copiar</button>
+                                </div>
+                            </div>
+                            <textarea id="medalsText" class="form-control output-text" rows="18" readonly></textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bienvenida -->
+        <div id="welcomeArea" class="text-center py-5">
+            <div class="welcome-hero mx-auto">
+                <i class="bi bi-clipboard2-data display-3 text-primary mb-3"></i>
+                <h1 class="fw-bold mb-2">Resúmenes deportivos en segundos</h1>
+                <p class="text-muted mb-4 lead">
+                    Carga el CSV de resultados, elige tu club y genera automáticamente
+                    publicaciones para redes, WhatsApp, prensa y el medallero.
+                </p>
+                <button class="btn btn-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#wizardModal">
+                    <i class="bi bi-magic me-2"></i>Iniciar análisis
+                </button>
+
+                <div class="row g-3 mt-5 text-start">
+                    <div class="col-md-4">
+                        <div class="feature-card"><i class="bi bi-1-circle-fill text-primary"></i>
+                            <div><strong>Carga el CSV</strong><br><span class="text-muted small">Detecta automáticamente el formato y la codificación.</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card"><i class="bi bi-2-circle-fill text-primary"></i>
+                            <div><strong>Elige el club</strong><br><span class="text-muted small">Clasifica cada deportista por su resultado oficial.</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card"><i class="bi bi-3-circle-fill text-primary"></i>
+                            <div><strong>Copia y comparte</strong><br><span class="text-muted small">Textos listos para cada canal, con un clic.</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asistente -->
+    <div class="modal fade" id="wizardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header text-bg-primary border-0">
+                    <h5 class="modal-title"><i class="bi bi-magic me-2"></i>Asistente de análisis</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+
+                    <div id="wizardStep1">
+                        <div class="wizard-steps mb-4"><span class="step active">1</span><span class="step-line"></span><span class="step">2</span></div>
+                        <h6 class="fw-bold mb-3">Paso 1 · Carga el archivo CSV</h6>
+                        <div class="dropzone mb-3">
+                            <i class="bi bi-file-earmark-spreadsheet display-5 text-primary mb-2"></i>
+                            <input class="form-control" type="file" id="fileInput" accept=".csv,text/csv">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="small text-muted" id="fileStatus">Esperando archivo CSV…</small>
+                            <button class="btn btn-primary" id="btnNextStep" disabled>Siguiente <i class="bi bi-arrow-right ms-1"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="wizardStep2" class="d-none">
+                        <div class="wizard-steps mb-4"><span class="step done">1</span><span class="step-line active"></span><span class="step active">2</span></div>
+                        <h6 class="fw-bold mb-3">Paso 2 · Opciones de análisis</h6>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Club</label>
+                            <select class="form-select form-select-lg" id="clubSelect">
+                                <option value="">— Elige un club —</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-semibold">Detallar deportistas hasta la posición</label>
+                            <input type="number" class="form-control" id="topFilter" value="16" min="1" placeholder="Ej.: 16">
+                            <div class="form-text">Quienes queden por debajo pasarán a la sección de menciones especiales.</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-outline-secondary" id="btnPrevStep"><i class="bi bi-arrow-left me-1"></i>Atrás</button>
+                            <button class="btn btn-primary" id="btnGenerate" disabled><i class="bi bi-check-circle me-1"></i>Generar resúmenes</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista previa -->
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content shadow border-0">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-eye me-2"></i>Vista previa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4" id="previewModalBody"></div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aviso de copiado -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="copyToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"><i class="bi bi-check-circle-fill text-success me-2"></i>Copiado al portapapeles</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

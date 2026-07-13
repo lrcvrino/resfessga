@@ -1,0 +1,197 @@
+/* =====================================================================
+ * Gestor de Resultados Deportivos — estilos
+ * ===================================================================== */
+
+:root {
+    --brand: #0d6efd;
+    --brand-soft: rgba(13, 110, 253, 0.08);
+}
+
+body {
+    min-height: 100vh;
+}
+
+.navbar-brand span {
+    letter-spacing: .2px;
+}
+
+/* ---------- Bienvenida ---------- */
+.welcome-hero {
+    max-width: 760px;
+}
+.welcome-hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    padding: 1rem 1.1rem;
+    height: 100%;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: .75rem;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .08);
+}
+.feature-card i {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* ---------- Barra de estadísticas ---------- */
+.stat-tile {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: .85rem;
+    padding: 1rem .75rem;
+    text-align: center;
+    height: 100%;
+}
+.stat-icon { font-size: 1.4rem; }
+.stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+.stat-label {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--bs-secondary-color);
+}
+
+/* ---------- Cabecera de salida ---------- */
+.output-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .75rem;
+}
+.output-hint {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+}
+.output-text {
+    font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .875rem;
+    line-height: 1.5;
+    resize: vertical;
+    background: var(--bs-tertiary-bg);
+}
+
+/* ---------- Nav tabs ---------- */
+.nav-tabs .nav-link {
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+.nav-tabs .nav-link.active {
+    color: var(--brand);
+    background: transparent;
+    border-bottom-color: var(--brand);
+}
+
+/* ---------- Medallero ---------- */
+.medal-card {
+    border-radius: .85rem;
+    padding: 1rem .5rem;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+    height: 100%;
+}
+.medal-value { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
+.medal-label {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--bs-secondary-color);
+}
+.medal-gold   { border-color: #f0c000; box-shadow: inset 0 -3px 0 #f0c000; }
+.medal-silver { border-color: #adb5bd; box-shadow: inset 0 -3px 0 #adb5bd; }
+.medal-bronze { border-color: #cd7f32; box-shadow: inset 0 -3px 0 #cd7f32; }
+.medal-total  { border-color: var(--brand); box-shadow: inset 0 -3px 0 var(--brand); }
+
+/* ---------- Asistente ---------- */
+.dropzone {
+    border: 2px dashed var(--bs-border-color);
+    border-radius: .85rem;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    background: var(--bs-tertiary-bg);
+}
+
+.wizard-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+.wizard-steps .step {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: .85rem;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-secondary-color);
+}
+.wizard-steps .step.active { background: var(--brand); color: #fff; }
+.wizard-steps .step.done   { background: var(--bs-success); color: #fff; }
+.wizard-steps .step-line {
+    width: 48px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bs-secondary-bg);
+}
+.wizard-steps .step-line.active { background: var(--brand); }
+
+/* ---------- Vistas previas ---------- */
+.preview-press {
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.7;
+}
+.preview-press p:first-child {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: .8rem;
+    color: var(--bs-secondary-color);
+}
+
+.preview-whatsapp {
+    background: #e5ddd5;
+    background-image: linear-gradient(rgba(0,0,0,.02), rgba(0,0,0,.02));
+}
+[data-bs-theme="dark"] .preview-whatsapp { background: #0b141a; }
+.wa-bubble {
+    background: #dcf8c6;
+    color: #111;
+    border-radius: .75rem;
+    padding: .85rem 1rem;
+    max-width: 90%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+    line-height: 1.5;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+[data-bs-theme="dark"] .wa-bubble { background: #005c4b; color: #e9edef; }
+
+.preview-social { line-height: 1.6; }
+
+/* ---------- Scrollbar ---------- */
+.output-text::-webkit-scrollbar { width: 8px; }
+.output-text::-webkit-scrollbar-track { background: transparent; }
+.output-text::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
+    border-radius: 4px;
+}
