@@ -214,23 +214,35 @@ function handleFileUpload(file, fileStatus, btnNext, clubSelect) {
 function decodeBuffer(buffer) {
     const bytes = new Uint8Array(buffer);
     let encoding = 'utf-8';
-    let offset = 0;
+    let data = bytes;
 
     if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xFE) {
-        encoding = 'utf-16le'; offset = 2;
+        encoding = 'utf-16le'; data = bytes.subarray(2);
     } else if (bytes.length >= 2 && bytes[0] === 0xFE && bytes[1] === 0xFF) {
-        encoding = 'utf-16be'; offset = 2;
+        encoding = 'utf-16be'; data = bytes.subarray(2);
     } else if (bytes.length >= 3 && bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) {
-        encoding = 'utf-8'; offset = 3;
+        encoding = 'utf-8'; data = bytes.subarray(3);
     } else {
-        // Heurística: si hay muchos bytes nulos en posiciones pares → UTF-16LE sin BOM
+        // Sin BOM: primero descartamos UTF-16LE (muchos bytes nulos intercalados)
         let nulls = 0;
-        const sample = Math.min(bytes.length, 200);
+        const sample = Math.min(bytes.length, 400);
         for (let i = 1; i < sample; i += 2) if (bytes[i] === 0x00) nulls++;
-        if (nulls > sample / 4) encoding = 'utf-16le';
+        if (nulls > sample / 4) {
+            encoding = 'utf-16le';
+        } else {
+            // ¿Es UTF-8 válido? Si no, casi seguro es Windows-1252 / ANSI
+            // (la codificación por defecto de Excel en Windows en español).
+            try {
+                new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+                encoding = 'utf-8';
+            } catch (_) {
+                encoding = 'windows-1252';
+            }
+        }
     }
 
-    return new TextDecoder(encoding).decode(bytes.subarray(offset));
+    // Normalizamos a NFC para que los acentos coincidan con los nombres de columna.
+    return new TextDecoder(encoding).decode(data).normalize('NFC');
 }
 
 /** Detecta el delimitador más probable a partir de la primera línea. */
@@ -245,12 +257,34 @@ function detectDelimiter(text) {
     return best;
 }
 
-/** Limpia claves (BOM/espacios) y valores de una fila. */
+/**
+ * "Pliega" un nombre de columna para comparar sin distinguir acentos,
+ * mayúsculas ni espacios ("Categoría", "categoria", "CATEGORIA " → "categoria").
+ */
+function foldKey(str) {
+    const nfd = str.replace(/^\uFEFF/, '').normalize('NFD');
+    let out = '';
+    for (const ch of nfd) {
+        const c = ch.codePointAt(0);
+        if (c >= 0x300 && c <= 0x36F) continue; // marca diacrítica combinante
+        out += ch;
+    }
+    return out.toLowerCase().trim();
+}
+
+/** Diccionario: nombre plegado → nombre de columna canónico. */
+const CANONICAL_COLUMNS = {};
+Object.values(COL).forEach(name => { CANONICAL_COLUMNS[foldKey(name)] = name; });
+
+/**
+ * Limpia una fila: remapea cada cabecera a su nombre canónico (tolerante a
+ * acentos/mayúsculas) y recorta espacios de los valores.
+ */
 function normalizeKeys(obj) {
     const clean = {};
     for (const key in obj) {
-        const cleanKey = key.replace(/^﻿/, '').trim();
-        clean[cleanKey] = (obj[key] ?? '').toString().trim();
+        const canonical = CANONICAL_COLUMNS[foldKey(key)] || key.replace(/^\uFEFF/, '').trim();
+        clean[canonical] = (obj[key] ?? '').toString().trim();
     }
     return clean;
 }
